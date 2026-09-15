@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Book QR Code - {{ book.title }} – LibraryMS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h3 class="fw-bold mb-1"><i class="bi bi-qr-code me-2"></i>Book QR Code</h3>
+        <p class="text-muted mb-0">High-resolution QR code generated for physical book labeling and scanner lookup.</p>
+    </div>
+    <a href="{{ url_for('admin.books') }}" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back to Books
+    </a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm text-center p-4">
+            <div class="card-body">
+                <small class="text-uppercase text-primary fw-bold letter-spacing-1 d-block mb-1">Library Management System</small>
+                <h4 class="fw-bold text-dark mb-1" id="modalBookTitle">{{ book.title }}</h4>
+                <p class="text-muted mb-2" id="modalBookAuthor">by {{ book.author }}</p>
+                <div class="mb-3">
+                    <span class="badge bg-secondary me-1" id="modalBookCategory">{{ book.category }}</span>
+                    <span class="badge bg-light text-dark border">Book ID: <strong id="modalBookId">{{ book.id }}</strong></span>
+                </div>
+
+                <div class="qr-container p-4 bg-light rounded-4 border d-inline-block shadow-sm my-3">
+                    <img id="modalQrImage"
+                         src="{{ url_for('admin.book_qrcode', id=book.id) }}"
+                         alt="Book QR Code for {{ book.title }}"
+                         class="img-fluid"
+                         style="width: 220px; height: 220px; image-rendering: pixelated;">
+                </div>
+
+                <div class="mt-2 mb-4">
+                    <span class="text-muted small d-block">ISBN Code</span>
+                    <code id="modalBookIsbn" class="fs-5 fw-bold text-dark bg-light px-3 py-1 rounded border">{{ book.isbn }}</code>
+                </div>
+
+                <div class="d-flex justify-content-center gap-2 flex-wrap pt-2 border-top">
+                    <a id="downloadQrBtn"
+                       href="{{ url_for('admin.book_qrcode', id=book.id, download=1) }}"
+                       download="book_{{ book.id }}_qr.png"
+                       class="btn btn-outline-primary px-4">
+                        <i class="bi bi-download me-2"></i> Download QR
+                    </a>
+                    <button id="printQrBtn"
+                            type="button"
+                            class="btn btn-primary px-4"
+                            onclick="printQRCode()">
+                        <i class="bi bi-printer me-2"></i> Print Label
+                    </button>
+                    <a href="{{ url_for('admin.scan_qr') }}" class="btn btn-outline-dark px-3">
+                        <i class="bi bi-qr-code-scan me-1"></i> Scan QR
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
