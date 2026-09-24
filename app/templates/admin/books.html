@@ -71,6 +71,17 @@
                             {% endif %}
                         </td>
                         <td>
+                            <button class="btn btn-sm btn-outline-dark me-1 btn-qr-code"
+                                    data-id="{{ book.id }}"
+                                    data-title="{{ book.title }}"
+                                    data-author="{{ book.author }}"
+                                    data-isbn="{{ book.isbn }}"
+                                    data-category="{{ book.category }}"
+                                    data-qr="{{ url_for('admin.book_qrcode', id=book.id) }}"
+                                    data-view-url="{{ url_for('admin.view_book_qr', id=book.id) }}"
+                                    title="View/Print QR Code">
+                                <i class="bi bi-qr-code me-1"></i> QR Code
+                            </button>
                             <a href="{{ url_for('admin.edit_book', id=book.id) }}"
                                class="btn btn-sm btn-outline-primary me-1" title="Edit">
                                 <i class="bi bi-pencil"></i>
@@ -122,4 +133,40 @@
     </ul>
 </nav>
 {% endif %}
+
+<!-- QR Code View / Download / Print Modal -->
+<div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="qrModalLabel"><i class="bi bi-qr-code me-2"></i>Book QR Code</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="mb-3">
+                    <h5 class="fw-bold text-dark mb-1" id="modalBookTitle">Book Title</h5>
+                    <p class="text-muted small mb-1" id="modalBookAuthor">by Author</p>
+                    <span class="badge bg-secondary" id="modalBookCategory">Category</span>
+                    <span class="badge bg-light text-dark border ms-1">Book ID: <strong id="modalBookId">--</strong></span>
+                </div>
+                <div class="qr-preview-container p-3 bg-light rounded-3 d-inline-block shadow-sm mb-3 border">
+                    <img id="modalQrImage" src="" alt="Book QR Code" style="width: 180px; height: 180px;" class="img-fluid">
+                </div>
+                <p class="text-muted small mb-0">ISBN: <code id="modalBookIsbn" class="fs-6 fw-bold">ISBN-1234</code></p>
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center flex-wrap gap-2">
+                <a id="downloadQrBtn" href="#" download="" class="btn btn-outline-primary">
+                    <i class="bi bi-download me-1"></i> Download QR
+                </a>
+                <button id="printQrBtn" type="button" class="btn btn-primary">
+                    <i class="bi bi-printer me-1"></i> Print Label
+                </button>
+                <a id="viewFullPageBtn" href="#" class="btn btn-outline-secondary">
+                    <i class="bi bi-box-arrow-up-right me-1"></i> Full Page
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
